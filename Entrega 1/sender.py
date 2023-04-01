@@ -1,12 +1,15 @@
+# Importando bibliotecas
 import socket
 import time
 import select
 
+# Definindo variáveis
 timeout = 3
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
 buf = 1024
 
+# Criando um arquivo para envio e escrevendo algo que execeda 1024 bits para testar o envio
 file_name = 'new_file.txt'
 file = open(file_name, 'w')
 file.write('Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet ornare odio, in pretium sem. Phasellus vitae augue nunc. Vivamus nunc nunc, elementum eu mi eget, aliquet finibus nisl. Fusce quis urna lorem. Donec vestibulum, ipsum id luctus pulvinar, nibh ligula posuere ante, sit amet imperdiet eros tortor nec nisl. Praesent pretium lobortis dapibus. Fusce sit amet finibus ante, id sodales tortor. Pellentesque lobortis massa vitae interdum gravida. Sed aliquam lacinia risus vitae ornare. Phasellus ultrices dolor a urna laoreet, id tempus dolor tempus. Quisque ut porttitor nisl. Nunc convallis nisl id tempus tempor. Integer cursus purus eget faucibus suscipit. Nulla eget arcu in dolor egestas tempor. Nullam luctus sit amet risus eget auctor.\
@@ -22,20 +25,24 @@ file.close()
 
 file_name = 'new_file.txt'.encode()
 
+# Criando o socket para envio
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.sendto(file_name, (UDP_IP, UDP_PORT))
 print("Sending %s ..." % file_name)
 
+# Lendo o arquivo em 1024 bits e enviando
 f = open(file_name, "rb")
 data = f.read(buf)
 while data:
     if sock.sendto(data, (UDP_IP, UDP_PORT)):
         data = f.read(buf)
-        time.sleep(0.02)  # Give receiver a bit time to save
+        time.sleep(0.02)  # Tempo para recebimento no destino
 f.close()
 
+# Criando arquivo para receber o retorno
 f = open('received_file_from_server.txt', 'w+b')
 
+# Recebendo os dados de 1024 bits em 1024 bits e escrendo no arquivo criado
 data_recv, addr = sock.recvfrom(1024)
 if data_recv:
     print("File name:", data_recv.decode())
