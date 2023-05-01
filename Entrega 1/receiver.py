@@ -24,6 +24,7 @@ while True:
     # Armazenando os dados no arquivo
     while True:
         ready = select.select([sock], [], [], timeout)
+        print(ready)
         if ready[0]:
             data, addr = sock.recvfrom(1024)
             f.write(data)
