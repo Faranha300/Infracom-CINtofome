@@ -1,4 +1,5 @@
 import random
+import socket
 
 buf = 1024
 timeout = 40
@@ -72,7 +73,7 @@ def wait_for_ack(sock, expected_ack):
         else:
             print(f"[ERRO] ACK: {ack.seq_n}, esperado: {expected_ack}")
             return False
-    except socket.timeout: # O que fazer?
+    except socket.timeout:
         print(f"Tempo limite excedido: {timeout} segundos.")
         return False
 
