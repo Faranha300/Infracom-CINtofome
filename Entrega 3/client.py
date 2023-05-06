@@ -1,86 +1,5 @@
 import socket
-import time
-import random
-
-
-class Packet: 
-
-    def __init__(self, seq_n, is_ack, data, checksum=None):
-        self.seq_n = seq_n
-        self.is_ack = is_ack
-        self.data = data
-        self.checksum = checksum
-        
-        if is_ack == "True":
-            is_ack = True
-        if is_ack == "False":
-            is_ack = False
-
-        if checksum is None:
-            self.checksum = self.real_checksum()
-
-    def reading_size(self):
-        _checksum = self.real_checksum()
-        packet_return = (str(self.seq_n) + "|" + str(_checksum) + "|" + str(self.is_ack) + "|")
-        return len(packet_return.encode('utf-8')) + 16 
-
-    def make_packet(self):
-        _checksum = self.real_checksum()
-        packet_return = (str(self.seq_n) + "|" + str(_checksum) + "|" + str(self.is_ack) + "|" + str(self.data))
-        return packet_return
-
-    def real_checksum(self):
-        data = str(self.seq_n) + str(self.is_ack) + str(self.data)
-        data = data.encode()
-
-        polynomial = 0x1021
-        crc = 0xFFFF
-        for byte in data:
-            crc ^= (byte << 8)
-            for _ in range(8):
-                if (crc & 0x8000):
-                    crc = (crc << 1) ^ polynomial
-                else:
-                    crc = (crc << 1)
-        return crc & 0xFFFF
-
-    def is_corrupt(self):
-        return self.real_checksum() != self.checksum
-
-
-def extract_packet(string_packet):
-    seq_num, checksum_, is_ack, data = string_packet.decode().split("|", 3)
-    return Packet(int(seq_num), is_ack, data, checksum=int(checksum_))
-
-def send_packet(sock, packet, addr):
-    print(f"Sending... : {packet.seq_n}")
-    print(" " + str(len(packet.make_packet().encode('utf-8'))) + " bytes")
-    sock.sendto(packet.make_packet().encode(), addr)
-
-def send_ack(sock, seq_num, addr):
-    packet = Packet(seq_num, True, 0, 0)
-    print(f"Enviando ACK: {seq_num}")
-    sock.sendto(packet.make_packet().encode(), addr)
-
-def wait_for_ack(sock, expected_ack):
-    try:
-        ack = Packet(0, True, "")
-        data, _ = sock.recvfrom(buf - ack.reading_size())
-        ack = extract_packet(data)
-        if ack.is_ack and expected_ack == ack.seq_n:
-            print(f"ACK recebido: {ack.seq_n}")
-            return True
-        else:
-            print(f"ACK incorreto: {ack.seq_n}, esperado: {expected_ack}")
-            # exit()
-            return False
-    except socket.timeout:
-        print(f"Tempo limite de {timeout} segundos atingido.")
-        return False
-
-def packet_loss(probability):
-    return random.random() < probability
-
+import rdt
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
@@ -116,9 +35,9 @@ sock.settimeout(timeout)
 seq_num = 0
 
 # Envia o nome do arquivo para o servidor
-packet = Packet(seq_num, False, filename)
-send_packet(sock, packet, (UDP_IP, UDP_PORT))
-if wait_for_ack(sock, seq_num):
+packet = rdt.Packet(seq_num, False, filename)
+rdt.send_packet(sock, packet, (UDP_IP, UDP_PORT))
+if rdt.wait_for_ack(sock, seq_num):
     seq_num = 1 - seq_num
 else:
     print("Resending...")
@@ -126,15 +45,15 @@ else:
 # Abre arquivo
 with open(filename, "rb") as f:
     # le pelo tamanho do buf
-    packet = Packet(seq_num, False, "") 
+    packet = rdt.Packet(seq_num, False, "") 
     data = f.read(buf - packet.reading_size())
 
     while data:
         # Envia pedaço usandoa logica do rdt3
-        packet = Packet(seq_num, False, data.decode('utf-8'))
-        if not packet_loss(loss_prob):
-            send_packet(sock, packet, (UDP_IP, UDP_PORT))
-            ack_received = wait_for_ack(sock, seq_num)
+        packet = rdt.Packet(seq_num, False, data.decode('utf-8'))
+        if not rdt.packet_loss(loss_prob):
+            rdt.send_packet(sock, packet, (UDP_IP, UDP_PORT))
+            ack_received = rdt.wait_for_ack(sock, seq_num)
         else:
             print("[Pulando pacotes]")
             ack_received = False
@@ -151,22 +70,22 @@ while True:
     try:
         # pega o packet
         data, addr = sock.recvfrom(buf)
-        packet = extract_packet(data)
+        packet = rdt.extract_packet(data)
         if packet.seq_n == seq_num:
             # checksum
             if packet.checksum == packet.real_checksum(): 
                 print(f"Recebido: {packet.seq_n}")
-                send_ack(sock, packet.seq_n, addr)
+                rdt.send_ack(sock, packet.seq_n, addr)
                 seq_num = 1 - seq_num
                 received_data += packet.data.encode('utf-8')
                 if len(packet.data) + packet.reading_size() < buf:
                     break
             else:
                 print(f"[Erro] Checksum: {packet.checksum}, esperado: {packet.real_checksum()}") 
-                send_ack(sock, 1 - seq_num, addr)
+                rdt.send_ack(sock, 1 - seq_num, addr)
         else:
             print(f"Pacote inesperado: {packet.seq_n}, enviando ACK anterior")
-            send_ack(sock, 1 - seq_num, addr)
+            rdt.send_ack(sock, 1 - seq_num, addr)
     except socket.timeout:
         print(
             f"Tempo limite excedido: {timeout} segundos. Encerrando...")
