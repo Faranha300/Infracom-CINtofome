@@ -42,7 +42,6 @@ while True:
         print('SEIS')
     else:
         pass
-        #print('bruh???????? dafuck dawg shit nah hell nah')
         
     # Leitura de mensagem digitada pelo usuário
     message = input("Enter a message to send to server: ")
