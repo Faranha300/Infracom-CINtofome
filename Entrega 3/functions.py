@@ -5,11 +5,6 @@ import time
 fileFolder = "resources"
 fileName = "Table.json"
 filePath = os.path.join(fileFolder, fileName)
-menu = [(1, "Hamburguer", 15.00),
-        (2, "Pastel",     12.00),
-        (3, "Coxinha",    10.00),
-        (4, "Empada",      5.00),
-        (5, "Sorvete",     7.00)]
 
 def getDefaultMessage():
     localTime = time.localtime()
