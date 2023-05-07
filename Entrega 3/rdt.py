@@ -53,13 +53,13 @@ def extract_packet(string_packet):
     return Packet(int(seq_num), is_ack, data, checksum=int(checksum_))
 
 def send_packet(sock, packet, addr):
-    print(f"Enviando: {packet.seq_n}")
-    print(" " + str(len(packet.make_packet().encode('utf-8'))) + " bytes")
+    #print(f"Enviando: {packet.seq_n}")
+    #print(" " + str(len(packet.make_packet().encode('utf-8'))) + " bytes")
     sock.sendto(packet.make_packet().encode(), addr)
 
 def send_ack(sock, seq_num, addr):
     packet = Packet(seq_num, True, 0, 0)
-    print(f"Enviando ACK: {seq_num}")
+    #print(f"Enviando ACK: {seq_num}")
     sock.sendto(packet.make_packet().encode(), addr)
 
 def wait_for_ack(sock, expected_ack):
@@ -68,13 +68,13 @@ def wait_for_ack(sock, expected_ack):
         data, _ = sock.recvfrom(buf - ack.reading_size())
         ack = extract_packet(data)
         if ack.is_ack and expected_ack == ack.seq_n:
-            print(f"ACK recebido: {ack.seq_n}")
+            #print(f"ACK recebido: {ack.seq_n}")
             return True
         else:
-            print(f"[ERRO] ACK: {ack.seq_n}, esperado: {expected_ack}")
+            #print(f"[ERRO] ACK: {ack.seq_n}, esperado: {expected_ack}")
             return False
     except socket.timeout:
-        print(f"Tempo limite excedido: {timeout} segundos.")
+        #print(f"Tempo limite excedido: {timeout} segundos.")
         return False
 
 def packet_loss(probability):
