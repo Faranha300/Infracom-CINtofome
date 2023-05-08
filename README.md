@@ -31,8 +31,8 @@ random -> Usado no rdt para saber se houve uma perda de pacotes.
 
 ## GRUPO
 
-- Fabrício Aranha Ferreira (faf3)
-- Igor Raphael Alves Varela (irav)
-- Caio Roberto da Silva Verçosa (crsv)
-- Antonio Alvarez Ferraz (aaf3)
-- Paulo Henrique Jaguaribe Carneiro (phjc)
+- [Fabrício Aranha Ferreira (faf3)](https://github.com/faranha300)
+- [Igor Raphael Alves Varela (irav)](https://github.com/duckdogersxd)
+- [Caio Roberto da Silva Verçosa (crsv)](https://github.com/CaioRSV)
+- [Antonio Alvarez Ferraz (aaf3)](https://github.com/ferrazton)
+- [Paulo Henrique Jaguaribe Carneiro (phjc)](https://github.com/phjc)
