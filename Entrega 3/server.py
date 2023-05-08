@@ -104,10 +104,8 @@ while True:
                         data, tableTotal, individualTotal = functions.getPayMessage(menu, clientAddr)
 
                         serverToUser = data
-
-                        print(float(packet.data))
                         
-                        if individualTotal >= float(packet.data) and float(packet.data)<= tableTotal:
+                        if individualTotal <= float(packet.data) and float(packet.data)<= tableTotal:
                             functions.payBill(float(packet.data), individualTotal, clientAddr)
                             serverToUser = "Conta paga."
                             fifthInput_var = 0
