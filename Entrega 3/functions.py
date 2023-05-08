@@ -159,5 +159,5 @@ def getMenu(menu):
     data = ""
     data += "ID | Comida | Preço\n"
     for i in range(len(menu)):
-        data += str(menu[i][0]) + " " + menu[i][1] + " " + str(menu[i][2]) + "\n"
+        data += "                 " + str(menu[i][0]) + " " + menu[i][1] + " " + str(menu[i][2]) + "\n"
     return data

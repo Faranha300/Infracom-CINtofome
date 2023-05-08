@@ -10,8 +10,6 @@ buf = 1024
 timeout = 40
 loss_prob = 0.5
 
-
-
 menu = [(1, "Hamburguer", 15.00),
         (2, "Pastel",     12.00),
         (3, "Coxinha",    10.00),
@@ -19,8 +17,6 @@ menu = [(1, "Hamburguer", 15.00),
         (5, "Sorvete",     7.00)]
 
 serverToUser = ""
-
-
 secondInput_var = 0
 chefiaInput_var = 0
 fifthInput_var = 0
@@ -124,12 +120,12 @@ while True:
 
                     elif chefiaInput_var != 0:
                         serverToUser = functions.getDefaultMessage() + """Digite uma das opções a seguir (apenas o número):
-                    1 - Cardápio
-                    2 - Pedir
-                    3 - Conta individual
-                    4 - Conta da mesa
-                    5 - Pagar conta
-                    6 - Sair da mesa\n"""
+                1 - Cardápio
+                2 - Pedir
+                3 - Conta individual
+                4 - Conta da mesa
+                5 - Pagar conta
+                6 - Sair da mesa\n"""
                         
                         packet.data = packet.data.split(' ')
                         #print(packet.data)
