@@ -41,7 +41,7 @@ def delClient(clientSocket):
         json.dumps(file, sort_keys = True, indent = 4)
     )
         
-def addOrder(order, menu, clientSocket): # adicionar o menu aq
+def addOrder(order, menu, clientSocket):
     with open(filePath, "r+") as file:
         fileData = json.load(file)
         idx = 0
@@ -53,13 +53,14 @@ def addOrder(order, menu, clientSocket): # adicionar o menu aq
     with open(filePath, "w") as file:
         json.dump(fileData, file, indent=4)
     
-def getIndividualBill(menu, clientSocket): # adicionar o menu aq
+def getIndividualBill(menu, clientSocket):
     with open(filePath, "r+") as file:
         fileData = json.load(file)
         idx = 0
         bill = []
         name = ""
         data = ""
+        total = ""
         for i in fileData["clients"]:
             if fileData["clients"][idx]["socket"] == clientSocket:
                 name = fileData["clients"][idx]["name"]
@@ -111,9 +112,9 @@ def getTableBill(menu, clientSocket):
     data += "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n"
     return (data, tableTotal)
 
-def getPayMessage(clientSocket):
-    tableTotal = getTableBill(clientSocket)[1]
-    individualTotal = getIndividualBill(clientSocket)[1]
+def getPayMessage(menu, clientSocket):
+    tableTotal = getTableBill(menu, clientSocket)[1]
+    individualTotal = getIndividualBill(menu, clientSocket)[1]
     data = "Sua conta foi R$" + str(individualTotal) + " e a da mesa R$ " + str(tableTotal) + ". Digite o valor a ser pago:"
     return (data, tableTotal, individualTotal)
 
@@ -153,3 +154,10 @@ def payBill(payment, individualTotal, clientSocket):
                     
         with open(filePath, "w") as file:
             json.dump(fileData, file, indent=4)
+
+def getMenu(menu):
+    data = ""
+    data += "ID | Comida | Preço\n"
+    for i in range(len(menu)):
+        data += str(menu[i][0]) + " " + menu[i][1] + " " + str(menu[i][2]) + "\n"
+    return data
