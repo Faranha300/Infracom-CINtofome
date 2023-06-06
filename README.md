@@ -19,11 +19,11 @@ Para a execução do projeto é necessário que o usuário abra dois terminais d
 
 ## BIBLIOTECAS USADAS
 
-socket -> É necessário para fazer a conexão entre os servidor e o cliente.
+socket -> É necessário para fazer a conexão entre o servidor e o cliente.
 
 json   -> Faz com que seja possivel salvar o arquivo Table.json.
 
-os     -> Usado para ser possivel de abrir o Table.json no python.
+os     -> Usado para ser possivel de abrir o Table.json e edita-lo.
 
 time   -> Usado para pegar a hora e o minuto de quando o servidor enviou a mensagem.
 
