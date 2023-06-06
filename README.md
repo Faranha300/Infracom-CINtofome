@@ -15,7 +15,7 @@ Para a execução do projeto é necessário que o usuário abra dois terminais d
 
 ![Sem título](https://user-images.githubusercontent.com/89427085/229162765-0e90f2dd-bde3-4eda-b243-7ba8b92fe898.png)
 
-É importante também que o arquivo ```Table.json``` esteja presente na pastar ```resources``` para que seja possivel do servidor manipular os clientes conectados.
+É importante também que o arquivo ```Table.json``` esteja presente na pasta ```resources``` para que seja possivel do servidor manipular os clientes conectados.
 
 ## BIBLIOTECAS USADAS
 
